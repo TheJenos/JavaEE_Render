@@ -218,10 +218,10 @@ public class HTMLFactory {
                         String newdate = new SimpleDateFormat(dateString[0]).format(d);
                         s = s.replaceAll("TIME\\{" + regexFilter(mss.group(1)) + "\\}", newdate);
                     }
-                    Matcher ms = Pattern.compile("JS\\{([^}]+)\\}").matcher(s);
-                    while (ms.find()) {
-                        s = s.replaceAll("JS\\{" + regexFilter(ms.group(1)) + "\\}", eval(ms.group(1)).toString());
-                    }
+                }
+                Matcher ms = Pattern.compile("JS\\{([^}]+)\\}").matcher(s);
+                while (ms.find()) {
+                    s = s.replaceAll("JS\\{" + regexFilter(ms.group(1)) + "\\}", eval(ms.group(1)).toString());
                 }
                 td.addTags(s);
                 tablerows.addTags(td);
@@ -398,7 +398,8 @@ public class HTMLFactory {
     }
 
     /**
-     * This method is not very useful. I use this method for separate string and cast into datatype 
+     * This method is not very useful. I use this method for separate string and
+     * cast into datatype
      *
      * @param s Parameter
      * @return This will return a Datapill Object
@@ -434,17 +435,14 @@ public class HTMLFactory {
     private ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
 
     /**
-     * When we insert a String there can be issue with Regex.So i create a filter.
+     * When we insert a String there can be issue with Regex.So i create a
+     * filter.
      *
      * @param s String that need to be filter.
      * @return This will return a Regex Filtered String.
      */
     public String regexFilter(String s) {
-        String ss[] = {"+", "-", "*", "/", "^", "%", "(", ")", "~", "!"};
-        for (int i = 0; i < ss.length; i++) {
-            s = s.replaceAll("\\" + ss[i], "\\\\" + ss[i]);
-        }
-        return s;
+        return Pattern.quote(s);
     }
 
     /**
