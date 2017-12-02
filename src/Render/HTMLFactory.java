@@ -137,10 +137,7 @@ public class HTMLFactory {
                     String newdate = new SimpleDateFormat(dateString[0]).format(d);
                     s = s.replaceAll("TIME\\{" + regexFilter(mss.group(1)) + "\\}", newdate);
                 }
-                Matcher ms = Pattern.compile("JS\\{([^}]+)\\}").matcher(s);
-                while (ms.find()) {
-                    s = s.replaceAll("JS\\{" + regexFilter(ms.group(1)) + "\\}", eval(ms.group(1)).toString());
-                }
+                s = javascriptEngin(s);
                 td.addTags(s);
                 tablerows.addTags(td);
             }
@@ -219,10 +216,7 @@ public class HTMLFactory {
                         s = s.replaceAll("TIME\\{" + regexFilter(mss.group(1)) + "\\}", newdate);
                     }
                 }
-                Matcher ms = Pattern.compile("JS\\{([^}]+)\\}").matcher(s);
-                while (ms.find()) {
-                    s = s.replaceAll("JS\\{" + regexFilter(ms.group(1)) + "\\}", eval(ms.group(1)).toString());
-                }
+                s = javascriptEngin(s);
                 td.addTags(s);
                 tablerows.addTags(td);
             }
@@ -283,10 +277,7 @@ public class HTMLFactory {
                 String newdate = new SimpleDateFormat(dateString[0]).format(d);
                 format = format.replaceAll("TIME\\{" + regexFilter(mss.group(1)) + "\\}", newdate);
             }
-            Matcher ms = Pattern.compile("JS\\{([^}]+)\\}").matcher(format);
-            while (ms.find()) {
-                format = format.replaceAll("JS\\{" + regexFilter(ms.group(1)) + "\\}", eval(ms.group(1)).toString());
-            }
+            format = javascriptEngin(format);
         }
         return format;
     }
@@ -322,10 +313,7 @@ public class HTMLFactory {
                 String newdate = new SimpleDateFormat(dateString[0]).format(d);
                 line = line.replaceAll("TIME\\{" + regexFilter(mss.group(1)) + "\\}", newdate);
             }
-            Matcher ms = Pattern.compile("JS\\{([^}]+)\\}").matcher(line);
-            while (ms.find()) {
-                line = line.replaceAll("JS\\{" + regexFilter(ms.group(1)) + "\\}", eval(ms.group(1)).toString());
-            }
+            line = javascriptEngin(line);
             finaltxt += line + "\n";
         }
         return finaltxt;
@@ -388,10 +376,7 @@ public class HTMLFactory {
                 String newdate = new SimpleDateFormat(dateString[0]).format(d);
                 s = s.replaceAll("TIME\\{" + regexFilter(mss.group(1)) + "\\}", newdate);
             }
-            Matcher ms = Pattern.compile("JS\\{([^}]+)\\}").matcher(s);
-            while (ms.find()) {
-                s = s.replaceAll("JS\\{" + regexFilter(ms.group(1)) + "\\}", eval(ms.group(1)).toString());
-            }
+            s = javascriptEngin(s);
             finaltxt += s + "\n";
         }
         return finaltxt;
@@ -443,6 +428,23 @@ public class HTMLFactory {
      */
     public String regexFilter(String s) {
         return Pattern.quote(s);
+    }
+
+    public String javascriptEngin(String s) throws Exception {
+//        Matcher ms = Pattern.compile("JS\\{([^}]+)\\}").matcher(s);
+//        while (ms.find()) {
+//            s = s.replaceAll("JS\\{" + regexFilter(ms.group(1)) + "\\}", eval(ms.group(1)).toString());
+//        }
+//        return s;
+        String codes[] = s.split("JS");
+        for (int i = 0; i < codes.length; i++) {
+            String code = codes[i];
+            Matcher ms = Pattern.compile("\\{([^\\u0000]+)\\}").matcher(code);
+            while (ms.find()) {
+                s = s.replaceAll("JS\\{" + regexFilter(ms.group(1)) + "\\}", eval(ms.group(1)).toString());
+            }
+        }
+        return s;
     }
 
     /**

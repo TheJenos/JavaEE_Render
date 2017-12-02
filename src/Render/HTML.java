@@ -8,6 +8,7 @@ package Render;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This is an encapsulated class that holds HTML contents
@@ -69,7 +70,9 @@ public class HTML implements Serializable {
         removeAttribute("class");
         if (!classes.isEmpty()) {
             String classtext = "";
-            classtext = classes.stream().map((classe) -> classe + " ").reduce(classtext, String::concat);
+            for (String classe : classes) {
+                classtext += classe + " ";
+            }
             addAttribute("class", classtext);
         }
     }
@@ -79,11 +82,11 @@ public class HTML implements Serializable {
      */
     public void updateAttributeText() {
         attributeText = "";
-        attribues.entrySet().forEach((entry) -> {
+        for (Map.Entry<String, String> entry : attribues.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
             attributeText += " " + key + "=\"" + value + "\"";
-        });
+        }
     }
 
     /**
@@ -91,17 +94,15 @@ public class HTML implements Serializable {
      */
     public void updateInnerHTML() {
         innerHTML = "";
-        innertags.stream().map((innertag) -> {
+        for (Serializable innertag : innertags) {
             if (innertag instanceof HTML) {
                 ((HTML) innertag).setIndent(getIndentNum() + 1);
                 ((HTML) innertag).updateInnerHTML();
             } else {
                 innertag = getIndent(getIndentNum() + 1) + innertag;
             }
-            return innertag;
-        }).forEachOrdered((innertag) -> {
             innerHTML += innertag.toString() + "\n";
-        });
+        }
     }
 
     /**

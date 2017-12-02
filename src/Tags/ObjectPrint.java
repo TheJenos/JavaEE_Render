@@ -39,6 +39,7 @@ public class ObjectPrint extends SimpleTagSupport {
             String t = new HTMLFactory().objectFormat(obj, sw.getBuffer().toString());
             out.println(t);
         } catch (Exception e) {
+            e.printStackTrace();
             out.println(new Alert(e.toString()).danger());
         }
     }

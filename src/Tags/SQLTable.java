@@ -52,6 +52,7 @@ public class SQLTable extends SimpleTagSupport {
             t.addClass(cls);
             out.println(t);
         } catch (Exception ex) {
+            ex.printStackTrace();
             out.println(new Alert(ex.toString()).danger());
         }
     }

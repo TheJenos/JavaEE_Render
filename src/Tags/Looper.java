@@ -38,6 +38,7 @@ public class Looper extends SimpleTagSupport {
             String t = (projection) ? new HTMLFactory().LooperTextWithProjection(criteria, sw.getBuffer().toString()) : new HTMLFactory().LooperText(criteria, sw.getBuffer().toString());
             out.println(t);
         } catch (Exception e) {
+            e.printStackTrace();
             out.println(new Alert(e.toString()).danger());
         }
 
