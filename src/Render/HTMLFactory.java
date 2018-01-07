@@ -202,7 +202,7 @@ public class HTMLFactory {
                         } else {
                             retrunO = c.getMethod("get" + string, null).invoke(pojo, null);
                         }
-                        c = retrunO.getClass();
+                        if(retrunO!=null)c = retrunO.getClass();
                         pojo = retrunO;
                     }
                     //engine.put(retrunO.toString().trim(), retrunO);
@@ -264,7 +264,7 @@ public class HTMLFactory {
                 } else {
                     retrunO = c.getMethod("get" + string, null).invoke(pojo, null);
                 }
-                c = retrunO.getClass();
+                if(retrunO!=null)c = retrunO.getClass();
                 pojo = retrunO;
             }
             //engine.put(retrunO.toString().trim(), retrunO);
@@ -362,7 +362,7 @@ public class HTMLFactory {
                     } else {
                         retrunO = c.getMethod("get" + string, null).invoke(pojo, null);
                     }
-                    c = retrunO.getClass();
+                    if(retrunO!=null)c = retrunO.getClass();
                     pojo = retrunO;
                 }
                 //engine.put(retrunO.toString().trim(), retrunO);
@@ -455,7 +455,7 @@ public class HTMLFactory {
      */
     public Object eval(String input) throws Exception {
         try {
-            return engine.eval(input);
+            return engine.eval("function run(){"+input+"}run();");
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
