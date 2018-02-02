@@ -202,7 +202,9 @@ public class HTMLFactory {
                         } else {
                             retrunO = c.getMethod("get" + string, null).invoke(pojo, null);
                         }
-                        if(retrunO!=null)c = retrunO.getClass();
+                        if (retrunO != null) {
+                            c = retrunO.getClass();
+                        }
                         pojo = retrunO;
                     }
                     //engine.put(retrunO.toString().trim(), retrunO);
@@ -264,7 +266,9 @@ public class HTMLFactory {
                 } else {
                     retrunO = c.getMethod("get" + string, null).invoke(pojo, null);
                 }
-                if(retrunO!=null)c = retrunO.getClass();
+                if (retrunO != null) {
+                    c = retrunO.getClass();
+                }
                 pojo = retrunO;
             }
             //engine.put(retrunO.toString().trim(), retrunO);
@@ -362,7 +366,9 @@ public class HTMLFactory {
                     } else {
                         retrunO = c.getMethod("get" + string, null).invoke(pojo, null);
                     }
-                    if(retrunO!=null)c = retrunO.getClass();
+                    if (retrunO != null) {
+                        c = retrunO.getClass();
+                    }
                     pojo = retrunO;
                 }
                 //engine.put(retrunO.toString().trim(), retrunO);
@@ -430,12 +436,35 @@ public class HTMLFactory {
         return Pattern.quote(s);
     }
 
+    /**
+     * This method split Date tags from text and execute. return value will be
+     * replace with tag.
+     *
+     * @param s script text
+     * @return
+     * @throws Exception
+     */
+    public String dateEngin(String s) throws Exception {
+        Matcher mss = Pattern.compile("TIME\\{([^}]+)\\}").matcher(s);
+        while (mss.find()) {
+            String dateString[] = mss.group(1).split("->");
+            String dats = dateString[1];
+            Date d = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.0").parse(dats);
+            String newdate = new SimpleDateFormat(dateString[0]).format(d);
+            s = s.replaceAll("TIME\\{" + regexFilter(mss.group(1)) + "\\}", newdate);
+        }
+        return s;
+    }
+
+    /**
+     * This method split JS tags from text and execute. return value will be
+     * replace with tag.
+     *
+     * @param s script text
+     * @return
+     * @throws Exception
+     */
     public String javascriptEngin(String s) throws Exception {
-//        Matcher ms = Pattern.compile("JS\\{([^}]+)\\}").matcher(s);
-//        while (ms.find()) {
-//            s = s.replaceAll("JS\\{" + regexFilter(ms.group(1)) + "\\}", eval(ms.group(1)).toString());
-//        }
-//        return s;
         String codes[] = s.split("JS");
         for (int i = 0; i < codes.length; i++) {
             String code = codes[i];
@@ -455,7 +484,7 @@ public class HTMLFactory {
      */
     public Object eval(String input) throws Exception {
         try {
-            return engine.eval("function run(){"+input+"}run();");
+            return engine.eval("function run(){" + input + "}run();");
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
