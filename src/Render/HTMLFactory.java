@@ -133,7 +133,7 @@ public class HTMLFactory {
                 while (mss.find()) {
                     String dateString[] = mss.group(1).split("->");
                     String dats = dateString[1];
-                    Date d = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.0").parse(dats);
+                    Date d = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0").parse(dats);
                     String newdate = new SimpleDateFormat(dateString[0]).format(d);
                     s = s.replaceAll("TIME\\{" + regexFilter(mss.group(1)) + "\\}", newdate);
                 }
@@ -213,7 +213,7 @@ public class HTMLFactory {
                     while (mss.find()) {
                         String dateString[] = mss.group(1).split("->");
                         String dats = dateString[1];
-                        Date d = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.0").parse(dats);
+                        Date d = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0").parse(dats);
                         String newdate = new SimpleDateFormat(dateString[0]).format(d);
                         s = s.replaceAll("TIME\\{" + regexFilter(mss.group(1)) + "\\}", newdate);
                     }
@@ -277,7 +277,7 @@ public class HTMLFactory {
             while (mss.find()) {
                 String dateString[] = mss.group(1).split("->");
                 String dats = dateString[1];
-                Date d = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.0").parse(dats);
+                Date d = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0").parse(dats);
                 String newdate = new SimpleDateFormat(dateString[0]).format(d);
                 format = format.replaceAll("TIME\\{" + regexFilter(mss.group(1)) + "\\}", newdate);
             }
@@ -313,7 +313,7 @@ public class HTMLFactory {
             while (mss.find()) {
                 String dateString[] = mss.group(1).split("->");
                 String dats = dateString[1];
-                Date d = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.0").parse(dats);
+                Date d = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0").parse(dats);
                 String newdate = new SimpleDateFormat(dateString[0]).format(d);
                 line = line.replaceAll("TIME\\{" + regexFilter(mss.group(1)) + "\\}", newdate);
             }
@@ -378,7 +378,7 @@ public class HTMLFactory {
             while (mss.find()) {
                 String dateString[] = mss.group(1).split("->");
                 String dats = dateString[1];
-                Date d = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.0").parse(dats);
+                Date d = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0").parse(dats);
                 String newdate = new SimpleDateFormat(dateString[0]).format(d);
                 s = s.replaceAll("TIME\\{" + regexFilter(mss.group(1)) + "\\}", newdate);
             }
@@ -449,7 +449,7 @@ public class HTMLFactory {
         while (mss.find()) {
             String dateString[] = mss.group(1).split("->");
             String dats = dateString[1];
-            Date d = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.0").parse(dats);
+            Date d = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0").parse(dats);
             String newdate = new SimpleDateFormat(dateString[0]).format(d);
             s = s.replaceAll("TIME\\{" + regexFilter(mss.group(1)) + "\\}", newdate);
         }
