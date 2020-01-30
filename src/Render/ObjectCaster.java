@@ -22,14 +22,21 @@ import org.json.JSONObject;
 public class ObjectCaster {
 
     public interface Action extends Serializable {
+
         public Object Execute(Object ob);
     }
 
     List obj;
+    Object singleObj;
+
     LinkedHashMap<String, Serializable> map = new LinkedHashMap<String, Serializable>();
 
     public ObjectCaster(List sr) {
-        obj = sr;
+        this.obj = sr;
+    }
+
+    public ObjectCaster(Object obj) {
+        this.singleObj = obj;
     }
 
     /**
@@ -67,7 +74,7 @@ public class ObjectCaster {
      * @param path key value to identify.
      * @param val Action that happened to be.
      */
-    public void addData(String path,final Object val) {
+    public void addData(String path, final Object val) {
         map.put(path, new Action() {
             @Override
             public Object Execute(Object ob) {
@@ -75,7 +82,7 @@ public class ObjectCaster {
             }
         });
     }
-    
+
     /**
      * Create Sub paths.
      *
@@ -121,7 +128,7 @@ public class ObjectCaster {
         }
         return currentjo;
     }
-    
+
     /**
      * This method return the map of range.
      *
@@ -182,6 +189,56 @@ public class ObjectCaster {
             ret.put(jsono);
         }
         return ret;
+    }
+
+    /**
+     * This returns the casted JSONObject.
+     *
+     * @return
+     */
+    public JSONObject CastSingle() throws Exception {
+        Object object = this.singleObj;
+        JSONObject jsono = new JSONObject();
+        for (Map.Entry<String, Serializable> entry : map.entrySet()) {
+            String key = entry.getKey();
+            if (entry.getValue() instanceof Action) {
+                Action a = (Action) entry.getValue();
+                subPath(jsono, key, a.Execute(object));
+            } else {
+                String value = entry.getValue().toString();
+                String[] sub = value.split("\\.");
+                Object retrunO = null;
+                Object pojo = object;
+                Class c = object.getClass();
+                for (int i = 0; i < sub.length; i++) {
+                    String string = sub[i];
+                    if (string.startsWith("#")) {
+                        String paras[] = string.substring(1).split(",");
+                        if (paras.length > 1) {
+                            Class[] classes = new Class[paras.length - 1];
+                            Object[] objs = new Object[paras.length - 1];
+                            for (int j = 1; j < paras.length; j++) {
+                                String para = paras[j];
+                                DataPill dp = getRealObject(para);
+                                classes[j - 1] = dp.getDatatype();
+                                objs[j - 1] = dp.getObject();
+                            }
+                            retrunO = c.getMethod(paras[0], classes).invoke(pojo, objs);
+                        } else {
+                            retrunO = c.getMethod(string.substring(1), null).invoke(pojo, null);
+                        }
+                    } else {
+                        retrunO = c.getMethod("get" + string, null).invoke(pojo, null);
+                    }
+                    if (retrunO != null) {
+                        c = retrunO.getClass();
+                    }
+                    pojo = retrunO;
+                }
+                subPath(jsono, key, pojo);
+            }
+        }
+        return jsono;
     }
 
     /**
